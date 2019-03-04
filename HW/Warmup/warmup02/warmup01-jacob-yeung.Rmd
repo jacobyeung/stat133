@@ -1,0 +1,190 @@
+---
+title: "warmup02-jacob-yeung"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plyr)
+```
+```{r}
+#1 Vectors
+
+number = c(30L, 35L, 23L, 9L, 11L, 27L, 34L, 6L, 3L, 0L)
+player = c("Stephen Curry", "Kevin Durant", "Draymond Green", "Andre Iguodala", "Klay Thompson", "Zaza Pachulia", "Shaun Livingston", "Nick Young", "David West", "Patrick McCaw")
+position = factor(c("PG", "PF", "PF", "SF", "SG", "C", "PG", "SG", "C", "SG"))
+height = c("6-3", "6-9", "6-7", "6-6", "6-7", "6-11", "6-7", "6-7", "6-9", "6-7")
+weight = c(190, 240, 230, 215, 215, 270, 192, 210, 250, 185)
+birthdate = c("March 14, 1988", "September 29, 1988", "March 4, 1990", "January 28, 1984", "February 8, 1990", "February 10, 1984", "September 11, 1985", "June 1, 1985", "August 29, 1980", "October 25, 1995")
+experience = c(8L, 10L, 5L, 13L, 6L, 14L, 12L, 10L, 14L, 1L)
+college = c("Davidson College", "University of Texas at Austin", "Michigan State University", "University of Arizona", "Washington State University", "NA", "NA", "University of Southern California", "Xavier University", "University of Nevada, Las Vegas")
+
+#a Heaviest Player
+player_info = data.frame(player, number, position, height, weight, birthdate, experience, college)
+heavy_first = player_info[order(player_info$weight, decreasing = TRUE), ]
+heavy_first$player[1]
+
+#b 6-6 College
+player_info[(player_info$height == "6-6"), "college"]
+
+#c Most experienced
+dec_exp = player_info[order(player_info$experience, decreasing = TRUE), ]
+dec_exp$position[1:2]
+
+#d Lightest Player
+heavy_first$number[nrow(heavy_first)]
+
+#e Frequencies of Position Values
+count(position)
+
+#f Weight above Average
+length(heavy_first[heavy_first$weight > mean(heavy_first$weight), "weight"])
+
+#g 9-12 years of experience
+length(player_info[9 <= player_info$experience & player_info$experience <= 12, "player"])
+
+#h Mean Years of Experience
+mean(player_info[player_info$position == "SG", "experience"])
+
+#i Median Weight
+median(player_info[player_info$position != "C", "weight"])
+
+#j First Quartile of Years of Experience
+quantile(player_info[player_info$position == "SG" | player_info$position == "PF", "experience"])[2]
+```
+
+```{r}
+#2 List for GSW
+gsw <- list(
+  player = player,
+  number = number,
+  position = position,
+  weight = weight,
+  experience = experience
+)
+
+#a Heaviest Player Number
+gsw$player[which(gsw$weight == max(gsw$weight))]
+
+#b Less Experience
+gsw$position[which(gsw$experience == min(gsw$experience))]
+
+#c Experience
+length(gsw$player[gsw$experience < 8 | gsw$experience > 11])
+
+#d Third Quartile
+quantile(gsw$experience[gsw$position == "PF" | gsw$position == "SG"])[4]
+
+#e Furthest Weight
+gsw$player[which(max(abs(gsw$weight - mean(gsw$weight))) + mean(gsw$weight) == gsw$weight)]
+```
+```{r}
+#3 More Lists
+hp <- list(
+  first = 'Harry',
+  last = 'Potter',
+  courses = c('Potions', 'Enchantments', 'Spells'),
+  sport = 'quidditch',
+  age = 18L,
+  gpa = 3.9
+)
+
+#a
+class(hp)
+
+#b
+length(hp)
+
+#c
+length(hp$courses)
+
+#d
+typeof(hp$age)
+
+#e
+typeof(hp$gpa)
+
+#f
+combine = hp[c("age", "gpa")]
+typeof(combine)
+#returns a list
+```
+#4 Technical Questions  
+  
+a. The command returns 2 because TRUE is mapped to 1L.  
+b. FALSE because the negative sign in front of the 2 values the "-2" as false.
+c. Command A has the numeric first and addition, coercing the !TRUE into an integer. Likewise, Command B has !TRUE first, causing the statement to go to FALSE.  
+
+```{r}
+#5
+lord <- c('v', 'o', 'l', 'd', 'e', 'm', 'o', 'r', 't')
+```
+a. lord[TRUE]
+The vector is getting recycled, so each element in lord is assigned TRUE.
+
+b. lord[length(lord) + 1]
+The index is out of bounds, so returns NA.
+
+c. lord[seq(from = length(lord), to = 1, by = -2)]
+The command extracts every other element from lord, backwards, until it reaches the first index.
+
+d. lord[lord == "o"]
+The command is filtering out all the elements in lord that are not "o". Subsetting all the other elements.
+
+e. lord[lord != "e" & lord != "o"]
+The command is filtering out all the elements in lord that are equivalent to "e" and "o". Subsetting all the other elements.
+
+f. lord[lord %in% c('a', 'e', 'i', 'o', 'u')]
+The command is filtering out all the elements in lord that are not in 'a', 'e', 'i', 'o', 'u'. Subsetting all the other elements.
+
+g. toupper(lord[!(lord %in% c('a', 'e', 'i', 'o', 'u'))])
+The command is filtering out all the elements in lord that are in 'a', 'e', 'i', 'o', 'u' and then upper casing the remaining elements. Subsetting all the other elements.
+
+h. paste(lord, collapse = '')
+The command is filtering out the white spaces when lord is returned.
+
+i. lord[is.na(lord)]
+The command is trying to subset lord by taking all the NA values in lord.
+
+j. sum(!is.na(lord))
+The command subsetted all the elements in lord that are not NA in value and summed up their truth values.
+
+```{r}
+#6
+vol = matrix(lord, nrow = 3, ncol = 3)
+
+#a
+vol[1, ]
+
+#b
+vol[1:2 , c(2, 1)]
+
+#c
+vol[c(3, 2, 1), ]
+
+#d
+vol[, c(1, 2, 2)]
+
+#e
+vol[c(3, 2, 1), c(3, 2, 1)]
+
+#f
+vol[c(3, 2, 1, 1, 2, 3), c(3, 2, 2, 3)]
+
+#g
+vol[c(3, 2, 1, 1, 2, 3), c(1, 2, 3, 3, 2, 1)]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

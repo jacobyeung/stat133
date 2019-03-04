@@ -1,0 +1,171 @@
+---
+title: "warmup03-jacob-yeung"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(psych)
+
+```
+The data have a header containing the variable names.
+The vaues are separated by a comma.
+There are missing values. They are codified by "".
+
+```{r}
+#1 Importing Data
+
+github = 'https://raw.githubusercontent.com/ucb-stat133/stat133-hws/'
+repo = 'master/data/nba2018-players.csv'
+datafile = paste0(github, repo)
+
+#a.
+data_types = c("character", "factor", "factor", "integer", "integer", "integer", "integer", "character", "real", "integer", "integer", "integer", "integer", "integer", "integer")
+
+#b.
+nba = read.csv(datafile, header = TRUE, colClasses = data_types)
+str(nba, vec.len = 1)
+nba1 = nba
+#c.
+nba2 = read.table(datafile, header = TRUE, sep = ",", colClasses = data_types)
+str(nba2, vec.len = 1)
+
+#d.
+identical(nba, nba2)
+
+salary = nba$salary
+```
+2
+a.  
+The first 10 rows are the first 9 rows of nba with the headers of nba as the first row. The column names are now V1,..., V15.
+
+b.
+All the columns are now factors.
+
+c.
+It fails to import the data because the command is missing an element in the argument, namely header.
+
+d.
+Importing the data with specifying the data types uses less memory than without specifying the data types.
+
+e.
+All the data values become characters.
+
+```{r}
+#3a. Examine Salary
+describe(nba$salary)
+salary = nba$salary
+#b.
+hist(nba$salary, xlim = range(nba$salary))
+
+#c.
+nba$salary2 = nba$salary / 1000000
+hist(nba$salary2)
+nba1$salary = salary
+#d.
+nba$salary2 = log(nba$salary2)
+hist(nba$salary2)
+#The histogram is more symmetrically distributed. The histogram is more right skewed now, with more values on the right half of the histogram.
+
+#e.
+low = nba$salary2 < -3
+length(less[less == TRUE])
+#8 players
+
+#f.
+nba[nba$salary2 < -3, c("player", "weight", "height", "team", "position")]
+
+#g.
+nba = nba[low, ]
+dim(nba)
+```
+
+```{r}
+#4a
+describe(nba1$points)
+hist(nba1$points)
+#b.
+p = nba1$points == 0
+nba1$points[p] = 0.1
+hist(log(nba1$points))
+
+#The points are again changing from having majority of points onthe left to having majority of points on the left. The plot has many points around the 5-6 values for the log transformed points.
+```
+
+```{r}
+#5 Transforming Age into a Factor
+salary2 = nba$salary2
+#a.
+boxplot(salary2 ~ nba$age, data = nba1, xlab = "Age", ylab = "Salary (in millions)")
+#The hightest median salaries seem to occur around 31 years of age.The players younger than 25 seem to have much lower median salaries.
+
+#b.
+boxplot(nba1$points ~ age, data = nba1, xlab = "Age", ylab = "Points")
+
+#The players around 27 years of age seem to have the highest median scores. From around age 30 to age 34, players seems to have approximately the same median scores.
+
+#c.
+age20 = nba1$age < 20
+nba1$age2 = nba1$age
+nba1$age2[age20] = 20
+age2 = cut(nba1$age2, breaks = c(19, 24, 29, Inf), labels = c("20-24", "25-29", "30+"))
+nba1$age2 = age2
+summary(age2)
+```
+
+```{r}
+#6 Salary vs Points, by Age Group
+
+#a.
+palette1 = c("#D4D62A", "#4F9D66", "#9575AB")
+
+#b.
+age_colors1 = age2 == "20-24"
+age_colors2 = age2 == "25-29"
+age_colors3 = age2 == "30+"
+age_colors = age2
+
+# for (x in 1:length(nba1$age2)){
+#   if(nba1$age2[x] == "20-24"){
+#     nba1$age2[x] = factor(palette1[1])
+#   }
+#   else if(nba1$age2[x] == "25-29"){
+#     nba1$age2[x] = factor(palette1[2])
+#   }
+#   else {
+#     nba1$age2[x] = factor(palette1[3])
+#   }
+# }
+# 
+# #c
+# plot(nba1$salary ~ nba1$points, data = nba1, log = "xy", main = "", xlab = "Points (log scale)", ylab = "Salary (log $)", col = age_colors, pch = 19, cex = 0.6)
+# legend("bottomright", fill = palette1, legned = levels(age2), title = "Age Groups", cex = 0.8)
+```
+
+```{r}
+#7
+#a.
+boxplot(nba$salary2 ~ nba$position, data = nba1, xlab = "Positions", ylab = "Log(Salary)")
+# There is no large difference in salary depending on position of players.
+
+#b.
+boxplot(nba1$points ~ position, data = nba1, xlab = "Positions", ylab = "Points")
+#There isn't a large difference in scored points based on position. However, shooting guards have the highest median of points scored.
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

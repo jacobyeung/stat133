@@ -1,0 +1,194 @@
+---
+title: "lab02-jacob-yeung"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plotly)
+library(plyr)
+```
+
+
+```{r}
+load('nba2018-salary-points.RData')
+ls()
+four <- head(player, n = 4)
+four[1]
+#Returns first player in four
+
+four[0]
+#Returns character(0)
+
+four[-1]
+#Returns all players in four except the first
+
+four[-c(1,2,3)]
+#Returns all players whose indices are not specified
+
+four[5]
+#Returns NA
+
+four[c(1,2,2,3,3,3)]
+#Returns the player whose index is specified however many times the index is specified
+
+even_players = player[seq(2, length(player), 2)]
+odd_salaries = salary[seq(1, length(salary), 2)]
+five_teams = team[c( TRUE, rep(FALSE, 4))]
+scored10 = scored[seq(10, length(scored), 10)]
+```
+```{r}
+#Logical Operators
+# AND
+TRUE & TRUE
+TRUE & FALSE
+FALSE & FALSE
+
+# OR
+TRUE | TRUE
+TRUE | FALSE
+FALSE | FALSE
+
+# NOT
+!TRUE
+!FALSE
+
+#GSW Centers
+GSW = player[team == 'GSW']
+center = GSW[position == "C"]
+center = center[!is.na(center)]
+
+#GSW and LAL
+LAL = player[team == "LAL"]
+GSW_LAL = intersect(GSW, LAL)
+
+#SG and PG of LAL
+sg_pg = LAL[position == "SG" | position == "PG"]
+
+#Small Forwards
+sf = data.frame(GSW[position == "SF"], LAL[position == "SF"])
+sf = sf[!is.na(sf)]
+
+#Largest Salary
+player_salary = data.frame(player, salary)
+largest_salary = max(player_salary$salary)
+lplayer_index = which(player_salary$salary == largest_salary)
+lplayer = player[lplayer_index]
+
+#Smallest Salary
+smallest_salary = which.min(player_salary$salary)
+splayer = player[smallest_salary]
+
+#Largest Number of Scored Points
+lscored_points = which.max(scored)
+sp_player = player[lscored_points]
+sp_player_salary = salary[lscored_points]
+
+#Largest Salary of All Centers
+centers_salary = player_salary[player_salary$player[position == "C"], ]
+lcenter_salary = max(centers_salary$salary)
+
+#Team of Player with Largest Number of Scored Points
+lteam = team[lscored_points]
+
+#Player with Largest Number of 3-Pointers
+player3 = player[which.max(points3)]
+```
+```{r}
+#Plotting
+plot(scored, salary)
+plot_ly(x = scored, y = salary, type = "scatter", mode = "markers")
+#An issue is that the top earning players are causing most of the salaries to be crunched into the bottom left corner.
+
+log_scored <- log(scored)
+log_salary <- log(salary)
+plot(log_scored, log_salary)
+text(log_scored, log_salary, labels = abbreviate(player))
+
+#GSW Plots
+
+GSW_scores = scored[team == "GSW"]
+GSW_salaries = salary[team == "GSW"]
+
+log_scores = log(GSW_scores)
+log_salaries = log(GSW_salaries)
+
+#Raw Values
+plot(GSW_scores, GSW_salaries)
+text(GSW_scores, GSW_salaries, labels = abbreviate(GSW))
+
+#Log transformed Values
+plot(log_scores, log_salaries)
+text(log_scores, log_salaries, labels = abbreviate(GSW))
+```
+```{r}
+#Factors
+position_fac <- factor(position)
+table(position_fac)
+
+#Manipulating Factors
+GSW_Positions = position_fac[c(which(team == "GSW"))]
+position15 = position_fac[c(which(salary > 15000000))]
+position_freq = count(position15)
+
+amt_team_members = count(team)
+sg = player[position == "SG"]
+amt_sg_team = team[c(which(player == sg[1:length(sg)]))]
+
+sg_amount = amt_team_members[, 2]
+column_zero = rep(0, times = nrow(amt_team_members))
+sg_rel_freq = data.frame(sg_amount, column_zero)
+player_positions = data.frame(player, position)
+total = 0
+for (x in 1:nrow(amt_team_members)){
+  a = 0
+  for (y in 1:amt_team_members[x, 2]){
+    total = total + 1
+    if (position_fac[total] == "SG"){
+      a = a + 1
+      sg_rel_freq[x, 2] = a
+    }
+  }
+}
+rel_freq = sg_rel_freq$column_zero / sg_rel_freq$sg_amount
+rel_freq
+```
+```{r}
+#More Plots
+
+plot(scored, salary, col = position_fac, pch = 1, cex = 2, xlab = "Points Scored", ylab = "Salary Earned", main = "NBA 2018 Salary vs. Points Scored")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

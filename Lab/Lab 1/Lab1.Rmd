@@ -1,0 +1,66 @@
+output: lab_1
+
+```{r}
+transportation <- 5
+groceries <- 10
+gym <- 2
+rent <- 50
+other <- 25
+total <- transportation + groceries + gym + rent + other
+total
+semester_total <- 5 * total
+semester_total
+year_total <- 10 * total
+year_total
+expenses <- c(transportation, groceries, gym, rent, other)
+barplot(expenses)
+barplot(sort(expenses), main = "Expenses", hori = FALSE, names.arg = c("gym", "transportation", "groceries", "other", "rent"))
+
+```
+
+Pythagorean formula
+```{r}
+a = 3
+b = 4
+c = sqrt(a**2 + b**2)
+```
+
+Binomial Formula
+```{r}
+
+
+n = 5
+k = 2
+p = 0.5
+factorial(n)/(factorial(k) * factorial(n - k))
+factorial(n)/(factorial(k) * factorial(n - k)) * p**k * (1 - p)**(n - k)
+choose(n, k) * p**k * (1 - p)**(n - k)
+
+n = 10
+k = 3
+p = 1/6
+choose(n, k) * p**k * (1 - p)**(n - k)
+
+dbinom(2, 5, 0.5)
+dbinom(3, 3, 1/6)
+dbinom(2, 5, 0.35)
+dbinom(3, 5, 0.35) + dbinom(4, 5, 0.35) + dbinom(5, 5, 0.35)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

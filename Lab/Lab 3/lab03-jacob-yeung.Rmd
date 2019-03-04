@@ -1,0 +1,138 @@
+---
+title: "Lab 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+"The character delimiter is a comma.  
+There is not a row for column names.  
+There are no missing values.  
+Sex - character  
+Length - continuous  
+Diameter - continuous  
+Height - continuous  
+Whole weight - continuous  
+Shucked weight - continuous  
+Viscera weight - continuous  
+Shell weight - continuous  
+Rings - integer  "
+
+```{r}
+url = "http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data"
+abalone = read.table(url, sep = ",")
+column_names = c("Sex", "Length", "Diameter", "Height", "Whole", "Shucked", "Viscera", "Shell", "Rings")
+column_types = c("character", "double", "double", "double", "double", "double", "double", "double", "integer")
+abalone = read.table("abalone.data", header = FALSE, sep = ",", col.names = column_names, colClasses = column_types)
+str(abalone)
+abalone2 = read.csv(url)
+str(abalone2)
+abalone10 = read.csv(url, nrows = 10)
+str(abalone10)
+abalone20 = read.table(url, sep = ",", skip = 10, nrows = 10)
+str(abalone20)
+```
+
+"When a column has value \"NULL\", the colmmn is skipped."
+
+```{r}
+library(psych)
+abalone_no_sex = abalone[-grep('Sex', colnames(abalone))]
+describe(abalone)
+
+```
+
+```{r}
+five_rows = abalone[1:5, ]
+every_five = abalone[seq(1, length(abalone), 5)]
+last_five = abalone[(nrow(abalone) - 4):(nrow(abalone)), ]
+height14 = abalone[abalone$Height < 0.14, ]
+dim(height14)
+infant = abalone[abalone$Sex == "I", ]
+dim(infant)
+male_female = abalone[abalone$Sex != "I", ]
+dim(male_female)
+rings25 = abalone[abalone$Rings > 25, c("Sex", "Rings")]
+infant_rings = abalone[abalone$Sex == "I" & 3 < abalone$Rings & abalone$Rings < 6, c("Sex", "Rings", "Diameter")]
+```
+
+```{r}
+#Adding New Variables and Sorting Rows
+abies = abalone[abalone$Sex == 'I', c('Length', 'Height', 'Diameter')]
+abies$Ht_Len = abies$Height / abies$Length
+abies2 = abies[order(abies$Length, decreasing = TRUE), ]
+abies$product = abies$Length * abies$Height
+abies3 = abies
+abies3$log_height = log(abies$Height)
+abies3$log_length = log(abies$Length)
+abalone12 = abalone[abalone$Height < 0.12, ]
+abalone12 = abalone[order(abalone$Height, decreasing = FALSE), ]
+abalone_high = abalone12[(nrow(abalone) - 4):nrow(abalone12), c("Sex", "Diameter", "Rings")]
+abalone_long = abalone[order(abalone$Length, decreasing = TRUE), ]
+abalone_long = abalone_long[(1:5), c("Sex", "Diameter", "Rings")]
+
+
+```
+```{r}
+#Plot Behaviors
+
+plot(abalone$Height)
+#Returns a scatterplot with height on the y axis and index of the abalone on the x axis
+
+Sex = factor(abalone$Sex)
+#Returns a barplot of the frequencies of each sex
+
+plot(abalone$Height, abalone$Length)
+#Returns a scatterplot with abalone$Length on the y axis and abalone$Height on the x axis
+
+HL = abalone[, c("Height", "Length")]
+plot(HL)
+#Returns a scatterplot with Length on the y axis and Height on the x axis
+
+HLD = abalone[, c("Height", "Length", "Diameter")]
+plot(HLD)  
+```
+  
+Returns 6 ((number of numeric columns)$^2$ - number of numeric columns) graphs, with each graph a scatterplot compared to one other numeric
+
+```{r}
+sex_length = data.frame(Sex, abalone$Length)
+plot(sex_length)
+#Returns 3 box plots, one for each sex
+
+length_sex = data.frame(abalone$Length, Sex)
+plot(length_sex)
+#Returns a scatter plot with abalone.Length on the x axis and sex(denoted as female = 1.0, infant = 2.0, male = 3.0) on the y axis
+```
+```{r}
+#Scatter Diagrams
+par(mfcol = c(2, 2))
+plot(sex_length, main = "Abalone Lengths for Corresponding Sex", xlab = "Sex", ylab = "Length", sub = "Box Plot", col = "red")
+plot(HL, main = "Abalone Heights vs Lengths", xlab = "Height", ylab = "Length", col = "blue", pch = 1)
+plot(log(HL), main = "Abalone Heights vs Lengths (Logarithmic Transformation Applied)", cex = 1)
+boxplot(HL, main = "Abalone Heights and Lengths Each in Boxplot", ylab = "Inches")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
