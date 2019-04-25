@@ -1,0 +1,127 @@
+---
+title: "lab09-jacob-yeung"
+author: "Jacob Yeung"
+date: "April 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(plyr)
+```
+
+```{r}
+states = rownames(USArrests)
+num_chars = nchar(states)
+char_freqs = table(num_chars)
+barplot(char_freqs)
+five = head(states, 5)
+num_char = nchar(five)
+first_five = paste(five, num_char, sep = " = ")
+name = paste(five, collapse = '')
+perm = nchar("ALABAMA")/(3*2*1)
+
+states_list = list()
+for(i in 1:length(char_freqs)){
+  states_list[i] = paste(states[num_chars == i + 3], collapse = ", ")
+  if((i+3) %% 2 == 0){
+    states_list[i] = toupper(states_list[i])
+  } else{
+    states_list[i] = tolower(states_list[i])
+  }
+}
+
+for(i in 1:11){
+  names(states_list)[i] = paste(i+3, "chars", sep = "-") 
+}
+
+"The function does not work because R is case sensitive"
+
+to_celsius <- function(x = 1) {
+  (x - 32) * (5/9)
+}
+
+to_kelvin <- function(x = 1) {
+  (x + 459.67) * (5/9)
+}
+
+to_reaumur <- function(x = 1) {
+  (x - 32) * (4/9)
+}
+
+to_rankine <- function(x = 1) {
+  x + 459.67
+}
+
+temp_convert <- function(x = 1, to = "celsius") {
+  to = tolower(to)
+  switch(to,
+         "celsius" = to_celsius(x),
+         "kelvin" = to_kelvin(x),
+         "reaumur" = to_reaumur(x),
+         "rankine" = to_rankine(x))
+}
+file_names = list()
+for(i in 1:10){
+   file_names[i] = paste("file", i, ".csv", sep = "")
+}
+file_names
+num = 1
+while(num <= 10){
+  file_names[num] = paste("file", num, ".csv", sep = "")
+  num = num + 1
+}
+file_names
+num = 1
+repeat{
+  if(num == 11){
+    break
+  }
+  file_names[num] = paste("file", num, ".csv", sep = "")
+  num = num + 1
+}
+file_names
+for(i in 1:10){
+  file_names[i] = paste("dataset", i, ".csv", sep = "")
+}
+file_names
+
+# name of output file
+outfile <- "output.txt"
+
+# writing to 'outfile.txt'
+cat("---", file = outfile)
+# insert new line
+cat("\n", file = outfile, append = TRUE)
+cat("title: \"Some title\"", file = "output.txt", append = TRUE)
+# insert 2 new lines
+cat("\n", file = outfile, append = TRUE)
+cat("author: \"Your name\"\n", file = outfile, append = TRUE)
+cat("date: \"today's date\"\n", file = outfile, append = TRUE)
+cat("output: html_document\n", file = outfile, append = TRUE)
+cat("---\n\n", file = outfile, append = TRUE)
+cat("This is the first line", file = outfile)
+cat("\n", file = outfile, append = TRUE)
+cat("A 2nd line", file = "output.txt", append = TRUE)
+cat("\n\n", file = outfile, append = TRUE)
+cat("\nThe quick brown fox jumps over the lazy dog\n",
+    file = outfile, append = TRUE)
+
+is_color = function(x){
+  return(x %in% colors())
+}
+
+colplot = function(col){
+  if(is_color(col)){
+    return(plot(rnorm(10), rnorm(10), main = paste("Testing color", col, sep = " ")))
+  }
+  return(paste("invalid color", col, sep = " "))
+}
+
+# this should plot
+colplot('tomato')
+
+# this stops with error message
+colplot('tomate')
+```
+

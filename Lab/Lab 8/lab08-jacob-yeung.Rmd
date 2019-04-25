@@ -1,0 +1,391 @@
+---
+title: "lab08-jacob-yeung"
+author: "Jacob Yeung"
+date: "March 22, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+x1 = rep(0, 100)
+x2 = rep(0, 10000)
+x3 = rep(0, 1000000)
+
+sum = 0
+
+for(k in 0:100){
+  current = 1/(2**k)
+  x1[k] = current
+  sum = sum + current
+}
+sum
+
+sum = 0
+
+for(k in 0:10000){
+  current = 1/(2**k)
+  x2[k] = current
+  sum = sum + current
+}
+sum
+
+sum = 0
+
+for(k in 0:1000000){
+  current = 1/(2**k)
+  x3[k] = current
+  sum = sum + current
+}
+sum
+sum = 0
+
+x4 = rep(0, 10)
+x5 = rep(0, 100)
+for(k in 0:10){
+  current = 1/(9**k)
+  x1[k] = current
+  sum = sum + current
+}
+sum
+
+sum = 0
+
+for(k in 0:100){
+  current = 1/(9**k)
+  x2[k] = current
+  sum = sum + current
+}
+sum
+
+#Series converges as n increases
+x10 = rep(0, 10)
+x100 = rep(0, 100)
+x1000 = rep(0, 1000)
+sum = 0
+for(n in 1:10){
+  current = 3 + (n - 1) * 3
+  x10[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+for(n in 1:100){
+  current = 3 + (n - 1) * 3
+  x100[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+for(n in 1:1000){
+  current = 3 + (n - 1) * 3
+  x1000[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+#Series does not converge
+
+for(n in 1:10){
+  current = 3*2**(n - 1)
+  x10[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+
+for(n in 1:100){
+  current = 3*2**(n - 1)
+  x100[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+
+for(n in 1:1000){
+  current = 3*2**(n - 1)
+  x1000[n] = current
+  sum = sum + current
+}
+sum
+sum = 0
+
+#Series does not converge as n increases
+
+x5 = rep(0, 5)
+x50 = rep(0, 50)
+
+power = -1
+for(n in 1:5){
+  power = power + 2.
+  if(n %% 2 == 0){
+    current = -((pi/4)**power)/factorial(power)
+  } else{
+    current = ((pi/4)**power)/factorial(power)
+  }
+  sum = sum + current
+}
+sum
+sum = 0
+sin(pi/4)
+power = -1
+
+for(n in 1:10){
+  power = power + 2.
+  if(n %% 2 == 0){
+    current = -((pi/4)**power)/factorial(power)
+  } else{
+    current = ((pi/4)**power)/factorial(power)
+  }
+  sum = sum + current
+}
+sum
+sum = 0
+sin(pi/4)
+power = -1
+
+for(n in 1:50){
+  power = power + 2.
+  if(n %% 2 == 0){
+    current = -((pi/4)**power)/factorial(power)
+  } else{
+    current = ((pi/4)**power)/factorial(power)
+  }
+  sum = sum + current
+}
+sum
+sum = 0
+sin(pi/4)
+power = -1
+
+for(n in 1:100){
+  power = power + 2.
+  if(n %% 2 == 0){
+    current = -((pi/4)**power)/factorial(power)
+  } else{
+    current = ((pi/4)**power)/factorial(power)
+  }
+  sum = sum + current
+}
+sum
+sum = 0
+sin(pi/4)
+
+set.seed(123)
+X <- matrix(rnorm(12), nrow = 4, ncol = 3)
+X
+
+for(i in 1:nrow(X)){
+  for(j in 1:ncol(X)){
+    if(X[i,j] >= 0){
+      X[i,j] = sqrt(X[i,j])
+    } else{
+      X[i,j] = X[i,j]**2
+    }
+  }
+}
+X
+
+reduce = function(x){
+  while(x %% 2 == 0){
+    print(x)
+    x = x / 2
+  }
+  return(x)
+}
+
+reduce(898128000)
+
+sum = 0
+x = seq(1, 100, 1)
+for(n in 1:100){
+  sum = sum + x[n]
+}
+sum/length(x)
+sum = 0
+
+len = length(x)
+while(len > 0){
+  sum = sum + len
+  len = len - 1
+}
+sum/length(x)
+sum = 0
+
+len = length(x)
+repeat{
+  if(len == 0){
+    break
+  }
+  sum = sum + len
+  len = len - 1
+}
+sum
+sum/length(x)
+sum = 0
+
+len = length(x)
+for(n in 1:len){
+  sum = sum + x[n]
+}
+avg = sum/len
+sum = 0
+for(n in 1:len){
+  sum = (x[n] - avg)**2 + sum
+}
+sd = sqrt(sum/(len - 1))
+sd
+sum = 0
+
+while(len > 0){
+  sum = sum + len
+  len = len - 1
+}
+avg = sum/length(x)
+sum = 0
+len = length(x)
+while(len > 0){
+  sum = sum + (len - avg)**2
+  len = len - 1
+}
+sd = sqrt(sum/(length(x) - 1))
+sd
+sum = 0
+
+len = length(x)
+repeat{
+  if(len == 0){
+    break
+  }
+  sum = sum + len
+  len = len - 1
+}
+avg = sum/length(x)
+sum = 0
+len = length(x)
+repeat{
+  if(len == 0){
+    break
+  }
+  sum = sum + (len - avg)**2
+  len = len - 1
+}
+sd = sqrt(sum/(length(x) - 1))
+sd
+
+prod = 1
+x = seq(1, 50, 1)
+len = length(x)
+for(n in 1:len){
+  prod = (prod * x[n]) ** (1/len)
+}
+prod
+prod = 1
+
+while(len > 0){
+  prod = (prod * x[n]) ** (1/length(x))
+  len = len - 1
+}
+prod
+prod = 1
+len = length(x)
+
+repeat{
+  if(len == 0){
+    break
+  }
+  len = len - 1
+  prod = (prod * x[n]) ** (1/length(x))
+}
+prod
+```
+
+
+
+```{r}
+num_letters <- length(LETTERS)
+set.seed(123)
+values <- sample.int(num_letters) 
+distances <- values %*% t(values)
+diag(distances) <- 0
+dimnames(distances) <- list(LETTERS, LETTERS)
+
+get_dist = function(distances, ltrs){
+  distance = 0
+  if(sum(ltrs %in% LETTERS) != length(ltrs)){
+    stop("Unrecognized character")
+  }
+  for(k in 1:length(ltrs)){
+    for(i in 1:nrow(distances)){
+      if(i == match(ltrs[k], LETTERS)){
+        if(k == length(ltrs)){
+          break
+        }
+        index2 = k + 1
+        for(j in 1:ncol(distances)){
+          if(j == match(ltrs[index2], LETTERS)){
+            distance = distance + distances[i, j]
+          }
+        }
+      }
+    }
+  }
+  
+  return(distance)
+}
+
+cal <- c('C', 'A', 'L')
+get_dist(distances, cal)
+stats <- c('S', 'T', 'A', 'T', 'S')
+get_dist(distances, stats)
+oski <- c('O', 'S', 'K', 'I')
+get_dist(distances, oski)
+zzz <- rep('Z', 3)
+get_dist(distances, zzz)
+lets <- LETTERS
+get_dist(distances, lets)
+first <- c("J", "A", "C", "O", "B")
+last <- c("Y", "E", "U", "N", "G")
+strings <- list(
+  cal = cal,
+  stats = stats,
+  oski = oski,
+  zzz = zzz,
+  lets = lets,
+  first = first,
+  last = last
+)
+
+strings_dists = rep(0, length(strings))
+names(strings_dists) = c("cal", "stats", "oski", 'zzz', 'lets', 'first', 'last')
+for(i in 1:length(strings)){
+  strings_dists[i] = get_dist(distances, strings[[i]])
+}
+strings_dists
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

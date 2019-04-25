@@ -1,0 +1,162 @@
+---
+title: "lab07-jacob-yeung"
+output: html_document
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+
+```
+
+```{r}
+#Simple math functions
+f = function(x){ #returns square of num
+  return(x * x)
+}
+g = function(x){#returns twice the num plus 5
+  return(2 * x + 5)
+}
+fog = function(x){#returns composite function f(g(x))
+  return(f(g(x)))
+}
+gof = function(x){#returns composite function g(f(x))
+  return(g(f(x)))
+}
+pythagoras = function(a){#returns length of hypotenuse of right triangle with legs a & a
+  return((2*a*a)**0.5)
+}
+circle_area = function(radius = 1){#calculates area of circle with radius
+  if (radius < 0){
+    stop("radius cannot be negative")
+  }
+  return(pi * radius^2)
+}
+cylinder_area = function(r = 1, h = 1){#returns surface area of cylinder with given parameters
+  if (r < 0 | h < 0){
+    stop("No negative parameters")
+  }
+  return(2 * circle_area(r) + 2 * pi * r * h)
+}
+cylinder_volume = function(r = 1, h = 1){#returns volume of cylinder
+  return(circle_area(r) * h)
+}
+miles2kms = function(x = 1){#converts miles to km
+  return(x * 1.6)
+}
+one_ten = data.frame(seq(1, 10), miles2kms(seq(1, 10)))
+twenty_hun = data.frame(seq(20, 100, 10), miles2kms(seq(20, 100, 10)))
+dfkms = rbind(one_ten, twenty_hun)
+names(dfkms)[1] = "miles"
+names(dfkms)[2] = "kms"
+gallon2liters = function(x){#converts gallons to liters
+  return(x * 3.78541)
+}
+liters2gallons = function(x){#liters to gallons
+  return(gallon2liters(x) / (3.78541 ** 2))
+}
+lg10 = data.frame(seq(1, 10), liters2gallons(seq(1, 10)))
+lg100 = data.frame(seq(20, 100, 10), liters2gallons(seq(20, 100, 10)))
+dfgallons = rbind(lg10, lg100)
+names(dfgallons)[1] = "liters"
+names(dfgallons)[2] = "gallons"
+
+seconds2years = function(x){#converts seconds to years
+  return(x / (60 * 60 * 24 * 365))}
+
+first = function(x){
+  (x^3)}
+x = seq(-4, 4, length.out = 20)
+y1 = first(x)
+plot(x, y1, type = "l", lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', x^3)))
+
+second = function(x){
+  (x^2 - 1)*(x + 3)^3}
+y2 = second(x)
+plot(x, y2, type = "l", lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', (x^2 - 1)(x + 3)^3)))
+
+third = function(x){
+  (x^2 - 1) * (x^2 - 9)
+}
+y3 = third(x)
+plot(x, y3, type = "l", lwd = 3, col = "#FB7215", las = 1)
+abline(h = 0, v = 0, col = '#888888aa', lwd = 1.5)
+title(main = expression(paste(f(x), ' = ', (x^2 - 1)(x^2 - 9))))
+
+squish = function(x){#x < 0 replaced with 0, x > 100 replaced with 100
+  if (x < 0){
+    return(0)
+  }
+  else if (x > 100){
+    return(100)
+  }
+  return(x)}
+
+is_even = function(x){#determines if number is even or not
+  if(typeof(x) != "double"){
+    return(NA)
+  }
+  else if (x %% 2 == 0){
+    return(TRUE)}
+  return(FALSE)}
+is_odd = function(x){#determines if number is odd
+  if(typeof(x) != "double"){
+    return(NA)
+  }
+  return(!is_even(x))}
+
+grade = function(x){#returns associated letter grade
+  if(x > 100){
+    stop("score must be a number between 0 and 100")
+  }
+  else if(x >= 90){
+    return("A")
+  }
+  else if(x >= 80){
+    return("B")
+  }
+  else if(x >= 70){
+    return("C")
+  }
+  else if(x >= 60){
+    return("D")
+  }
+  return("F")}
+
+miles2inches = function(x = 1){#miles to inches
+  return(x * 63360)}
+miles2feet = function(x = 1){#miles to feet
+  return(x * 5280)}
+miles2yards = function(x = 1){#miles to yards
+  return(x * 1760)}
+miles2meters = function(x = 1){#miles to meters
+  return(x / 0.00062137)}
+miles2meters = function(x = 1){#miles to kms
+  return(x / 0.62137)}
+convert = function(x, to = "km"){
+  switch(to,
+         "km" = miles2kms(),
+         "in" = miles2inches(),
+         "ft" = miles2feet(),
+         "m" = miles2meters(),
+         "yd" = miles2yards()
+  )
+  to(x)
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

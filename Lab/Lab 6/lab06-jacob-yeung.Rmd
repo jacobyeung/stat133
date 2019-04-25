@@ -1,0 +1,22 @@
+---
+title: "lab06-jacob-yeung"
+output: html_document
+---
+
+```{r eval = FALSE}
+ls
+mkdir demo-repo
+cd demo-repo
+git init
+echo "# Demo Repo" >> README.md
+git status
+git add README.md
+git status
+git commit -m "first commit"
+git remote add origin https://github.com/jacobyeung/demo-repo.git
+git remote -v
+git status
+git push origin master
+
+```
+

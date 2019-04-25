@@ -1,0 +1,169 @@
+---
+title: "warmup05-jacob-yeung"
+author: "Jacob Yeung"
+date: "March 22, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+library(roxygen2)
+library(latex2exp)
+library(Hmisc)
+```
+
+```{r}
+# @title gaussian normal function
+# @description computes the probability density, based on the gaussian normal function, from user inputs
+# @param numeric vector for x, mean, and standard deviation
+# @return returns the probability density calculated with gaussian normal function of the specified parameters
+gaussian = function(x = 0, m = 0, s = 1){
+  if(s <= 0){
+    stop("s must be greater than zero")
+  }
+  return(((exp(-0.5 * ((x - m) / s) ** 2)) / (s * (2 * pi) ** 0.5)))
+}
+
+# test set 1
+gaussian(x = 0, m = 0, s = 1)
+gaussian(x = 1, m = 0, s = 2)
+
+# test set 2
+gaussian(x = 1, m = 0, s = 0)
+gaussian(x = 1, m = 0, s = -1)
+
+# gaussian curve
+x_values = seq(from = -4.5, to = 4.5, by = 0.1)
+y_values = gaussian(x_values, m = 0, s = 2)
+plot(x_values, y_values, las = 1, type = "l", lwd = 2)
+
+# wikipedia normal distribution graph
+x_values = seq(from = -5, to = 5, by = 0.01)
+y_values1 = gaussian(x_values, m = 0, s = 0.2 ** 0.5)
+y_values2 = gaussian(x_values, m = 0, s = 1)
+y_values3 = gaussian(x_values, m = 0, s = 5 ** 0.5)
+y_values4 = gaussian(x_values, m = -2, s = 0.5 ** 0.5)
+
+plot(x_values, y_values1, las = 1, type = "l", lwd = 2, col = "#000080", xlab = TeX("X"),
+     ylab = bquote(phi1[mu ~ "," ~ sigma ^ 2] ~ "(X)"), xaxt = "n", yaxt = "n", 
+     xlim = c(-5, 5))
+lines(x_values, y_values2, las = 1, type = "l", lwd = 2, col = "#FF0000")
+lines(x_values, y_values3, las = 1, type = "l", lwd = 2, col = "#FFA500")
+lines(x_values, y_values4, las = 1, type = "l", lwd = 2, col = "#008000")
+
+axis(tick = TRUE, side = 1, xaxp = c(-5, 5, 10), tck = 0.02, col.ticks = "#000000")
+
+axis(tick = TRUE, side = 2, yaxp = c(0, 1, 5), tck = 0.02, col.ticks = "#000000")
+minor.tick(nx = 6, ny = 6, tick.ratio = -0.5)
+axis(tick = TRUE, side = 3, xaxp = c(-4.75, 4.75, 38), tck = 0.01, labels = FALSE)
+axis(tick = TRUE, side = 4, yaxp = c(0.0, 1.0, 18), tck = 0.01, labels = FALSE)
+grid(nx = 10, ny = 5, col = "#d3d3d3")
+legend(x = "topright", legend = c(expression(paste(mu, "=0,  ", sigma ^ 2, "=0.2")),
+                          expression(paste(mu, "=0,  ", sigma ^ 2, "=1.0")),
+                          expression(paste(mu, "=0,  ", sigma ^ 2, "=5.0")),
+                          expression(paste(mu, "=-2, ", sigma ^ 2, "=0.5"))),
+       col = c("#000080", "#FF0000", "#FFA500", "#008000"), box.lty = 0, lty = 1:4,
+       cex = 1, bg = NA)
+```
+
+```{r}
+# @title Descriptive Statistics
+# @description Function computes the minimum, first quartile, median, mean, third quartile, maximum, span, interquartile range, and standard deviation of a given numeric vector
+# @param takes in a numeric vector x and whether or not we should remove missing values before computations of the statistics
+# @return Function returns the 9 computed descriptive statistics listed above
+
+descriptive = function(x = 0, na.rm = FALSE){
+  if(class(x) != "numeric"){
+    stop("input needs to be numeric")
+  }
+  if(na.rm){
+    x = na.omit(x)
+  }
+  quant = quantile(x)
+  iqr = quant[4] - quant[2]
+  statistics = c(min(x), quant[2], median(x), mean(x), quant[4], max(x),
+                 max(x) - min(x), iqr, sd(x))
+  names(statistics) = c("min", "q1", "median", "mean", "q3", "max", "range", "iqr", "sd")
+
+  return(statistics)
+}
+
+# input vectors
+set.seed(100)
+x = rnorm(100)
+y = x
+y[sample(1:100, size = 10)] = NA
+
+# test set 1
+descriptive(x)
+descriptive(y)
+descriptive(y, na.rm = TRUE)
+descriptive(letters)
+
+# test set 2
+a = descriptive(x)
+class(a)
+length(a)
+names(a)
+```
+
+```{r}
+# @title Minkowski Distance Function
+# @description Function computes the Minkowski distance of given order p of 2 given numeric vectors
+# @param Takes in two numeric vectors and the p order
+# @return Returns the calculated p-norm distance for the 2 vectors
+
+minkowski = function(x, y, p = 1){
+  if(length(x) != length(y)){
+    stop("x and y have different lengths")
+  }
+  if(class(x) != "numeric" | class(y) != "numeric"){
+    stop("input vectors must be of class numeric")
+  }
+  if(class(p) == "character"){
+    if(p != "max"){
+      stop("invalid character value for p")
+    }
+    return(max(abs(x-y)))
+  }
+  if(class(p) == "numeric"){
+    if(p < 1){
+      stop("p cannot be less than 1")  
+    }
+    return(sum(abs((x - y))**p)**1/p)
+  }
+}
+
+# some points
+point1 = c(0, 0)
+point2 = c(1, 1)
+point3 = sqrt(c(2, 2))
+point4 = c(0, 1)
+point5 = c(1, 1, 1)
+
+# test set 1
+minkowski(point1, point2, p = 1)
+minkowski(point1, point3, p = 2)
+minkowski(point1, point2, p = 'max')
+
+# test set 2
+minkowski(point4, point5, p = 1)
+minkowski(point1, point2, p = 0.5)
+minkowski(point1, point2, p = 'min')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
